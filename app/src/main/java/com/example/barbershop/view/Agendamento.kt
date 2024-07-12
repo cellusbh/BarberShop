@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
+import android.widget.Spinner
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +41,14 @@ class Agendamento : AppCompatActivity() {
         val servicos = listOf("Selecione um serviço", "Corte Masculino", "Barba e Bigode", "Lavagem Capilar", "Tratamento Capilar")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, servicos)
         binding.spinnerServicos.adapter = adapter
+
+        val servico = intent.extras?.getString("servico")
+        if (servico != null) {
+            val spinner = findViewById<Spinner>(R.id.spinner_servicos)
+            val adapter = spinner.adapter as ArrayAdapter<String>
+            val position = adapter.getPosition(servico)
+            spinner.setSelection(position)
+        }
 
         val nome = intent.extras?.getString("nome").toString()
 
@@ -74,7 +83,7 @@ class Agendamento : AppCompatActivity() {
                 minuto = minute.toString()
             }
 
-            hora = "$hourOfDay:$minuto"
+            hora = "$hourOfDay : $minuto"
         }
 
         binding.timePicker.setIs24HourView(true)

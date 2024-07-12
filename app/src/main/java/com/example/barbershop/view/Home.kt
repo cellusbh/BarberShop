@@ -57,7 +57,7 @@ class Home : AppCompatActivity() {
 
         val recyclerViewServicos = binding.recyclerViewAll
         recyclerViewServicos.layoutManager = GridLayoutManager(this, 2)
-        servicosAdapter = ServicosAdapter(this, listaServicos)
+        servicosAdapter = ServicosAdapter(this, listaServicos, nome, startForResult)
         recyclerViewServicos.setHasFixedSize(true)
         recyclerViewServicos.adapter = servicosAdapter
         getServicos()
