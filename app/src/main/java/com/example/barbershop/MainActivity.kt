@@ -44,17 +44,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun mensagem(view: View, mensagem: String) {
-        val snackbar = Snackbar.make(view, mensagem, Snackbar.LENGTH_LONG)
-        snackbar.setBackgroundTint(Color.parseColor("#E74C3C"))
-        snackbar.setTextColor(Color.parseColor("#FFFFFF"))
-        snackbar.show()
-    }
-
     private fun navegarHome(nome: String) {
         val intent = Intent(this, Home::class.java)
         intent.putExtra("nome", nome)
         startActivity(intent)
     }
 
+    private fun mensagem(view: View, mensagem: String) {
+        val snackbar = Snackbar.make(view, mensagem, Snackbar.LENGTH_LONG)
+        snackbar.setBackgroundTint(Color.parseColor("#E74C3C"))
+        snackbar.setTextColor(Color.parseColor("#FFFFFF"))
+        snackbar.show()
+    }
 }

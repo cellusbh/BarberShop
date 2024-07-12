@@ -1,8 +1,11 @@
 package com.example.barbershop.view
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -11,6 +14,7 @@ import com.example.barbershop.R
 import com.example.barbershop.adapter.ServicosAdapter
 import com.example.barbershop.databinding.ActivityHomeBinding
 import com.example.barbershop.model.Servicos
+import com.google.android.material.snackbar.Snackbar
 
 class Home : AppCompatActivity() {
 
@@ -31,19 +35,32 @@ class Home : AppCompatActivity() {
         val nome = intent.extras?.getString("nome")
         binding.textWelcome.text = "Bem-vindo(a), $nome!"
 
+        val startForResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val message = result.data?.getStringExtra("message")
+                    val barbeiro = result.data?.getStringExtra("barbeiro")
+                    if (message != null && barbeiro != null) {
+                        val fullMessage = "Agendamento realizado com sucesso com $barbeiro!"
+                        val snackbar = Snackbar.make(binding.root, fullMessage, Snackbar.LENGTH_LONG)
+                        snackbar.setBackgroundTint(Color.parseColor("#FF03DAC5"))
+                        snackbar.show()
+                    }
+                }
+            }
+
+        binding.buttonAgendar.setOnClickListener {
+            val intent = Intent(this, Agendamento::class.java)
+            intent.putExtra("nome", nome)
+            startForResult.launch(intent)
+        }
+
         val recyclerViewServicos = binding.recyclerViewAll
         recyclerViewServicos.layoutManager = GridLayoutManager(this, 2)
         servicosAdapter = ServicosAdapter(this, listaServicos)
         recyclerViewServicos.setHasFixedSize(true)
         recyclerViewServicos.adapter = servicosAdapter
         getServicos()
-
-        binding.buttonAgendar.setOnClickListener {
-            val intent = Intent(this, Agendamento::class.java)
-            intent.putExtra("nome", nome)
-            startActivity(intent)
-        }
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
