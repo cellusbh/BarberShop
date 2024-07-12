@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Barber Shop</string>
+    <string name="barber_shop">Barber Shop</string>
+    <string name="informe_nome">Informe o nome!</string>
+    <string name="informe_senha">Informe a senha!</string>
+    <string name="senha_length">A senha deve ter no mínimo 6 caracteres!</string>
+</resources>
