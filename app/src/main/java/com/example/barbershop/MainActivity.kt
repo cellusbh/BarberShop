@@ -9,12 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.barbershop.databinding.ActivityMainBinding
+import com.example.barbershop.security.SecurityPreferences
 import com.example.barbershop.view.Home
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var securityPreferences: SecurityPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,14 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        securityPreferences = SecurityPreferences(this)
+
+        val savedName = securityPreferences.getString("nome")
+        if (savedName != null) {
+            navegarHome(savedName)
+            return
+        }
+
         binding.buttonLogin.setOnClickListener {
             val nome = binding.editNome.text.toString()
             val senha = binding.editSenha.text.toString()
@@ -33,8 +43,12 @@ class MainActivity : AppCompatActivity() {
                 nome.isEmpty() -> { mensagem(it, getString(R.string.informe_nome)) }
                 senha.isEmpty() -> { mensagem(it, getString(R.string.informe_senha)) }
                 senha.length <= 5 -> { mensagem(it, getString(R.string.senha_length)) }
-                else -> navegarHome(nome)
+                else -> {
+                    securityPreferences.storeString("nome", nome)
+                    navegarHome(nome)
+                    Unit
             }
+        }
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
